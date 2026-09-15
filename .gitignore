@@ -1,0 +1,16 @@
+# Virtual Environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Gmail OAuth credentials
+client_secret.json
+token.json
+
+# Database
+database/*.db
+
+# Environment variables
+.env

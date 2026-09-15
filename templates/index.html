@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Email Auto Reply System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 17px;
+        }
+
+        .status {
+            margin: 30px 0;
+            padding: 18px;
+            border-radius: 10px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .check-section {
+            text-align: center;
+            margin: 25px 0 35px;
+        }
+
+        .check-button {
+            padding: 13px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #1976d2;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .check-button:hover {
+            background: #125aa0;
+        }
+
+        .section {
+            margin-top: 30px;
+        }
+
+        .section h2 {
+            color: #333;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card .icon {
+            font-size: 30px;
+        }
+
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 8px 0;
+            color: #1976d2;
+        }
+
+        .stat-card .label {
+            color: #666;
+        }
+
+        .last-check {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            text-align: center;
+            color: #555;
+        }
+
+        .add-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .add-form input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .add-form button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #1976d2;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .sender {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f5f5f5;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #1976d2;
+        }
+
+        .remove-button {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            background: #d32f2f;
+            color: white;
+            cursor: pointer;
+        }
+
+        .empty {
+            color: #777;
+            padding: 15px;
+            background: #fafafa;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 700px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .add-form {
+                flex-direction: column;
+            }
+
+            .sender {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📧 Email Auto Reply System</h1>
+
+    <p class="subtitle">
+        Welcome to your personal Email Auto Reply System.
+    </p>
+
+    <div class="status">
+        🟢 System is running
+    </div>
+
+    <!-- Check Emails -->
+    <div class="check-section">
+
+        <form action="/check" method="POST">
+
+            <button type="submit" class="check-button">
+                🔄 Check Emails Now
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Statistics -->
+    <div class="section">
+
+        <h2>📊 Email Statistics</h2>
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <div class="icon">📥</div>
+
+                <div class="number">
+                    {{ stats[0] }}
+                </div>
+
+                <div class="label">
+                    Emails Checked
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="icon">🤖</div>
+
+                <div class="number">
+                    {{ stats[1] }}
+                </div>
+
+                <div class="label">
+                    Replies Sent
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="icon">🚫</div>
+
+                <div class="number">
+                    {{ stats[2] }}
+                </div>
+
+                <div class="label">
+                    Emails Skipped
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="last-check">
+            🕒 Last Check: <strong>{{ stats[3] }}</strong>
+        </div>
+
+    </div>
+
+
+    <!-- Allowed Senders -->
+    <div class="section">
+
+        <h2>👥 Allowed Senders</h2>
+
+        <form class="add-form" action="/add" method="POST">
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter email address"
+                required
+            >
+
+            <button type="submit">
+                ➕ Add Sender
+            </button>
+
+        </form>
+
+
+        {% if senders %}
+
+            {% for sender in senders %}
+
+                <div class="sender">
+
+                    <span>
+                        ✅ {{ sender[1] }}
+                    </span>
+
+                    <form
+                        action="/remove/{{ sender[0] }}"
+                        method="POST"
+                    >
+
+                        <button
+                            type="submit"
+                            class="remove-button"
+                        >
+                            ❌ Remove
+                        </button>
+
+                    </form>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty">
+                No allowed senders found.
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
