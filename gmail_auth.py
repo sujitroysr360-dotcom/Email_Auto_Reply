@@ -7,7 +7,7 @@ from googleapiclient.discovery import build
 SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
 
 CREDENTIALS_FILE = "client_secret.json"
-TOKEN_FILE = "token.json"
+TOKEN_FILE = "/etc/secrets/token.json" if os.path.exists("/etc/secrets/token.json") else "token.json"
 
 
 def gmail_login():
