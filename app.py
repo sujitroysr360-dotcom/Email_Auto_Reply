@@ -42,6 +42,7 @@ def init_database():
     conn.commit()
     conn.close()
 
+init_database()
 
 @app.route("/")
 def home():
